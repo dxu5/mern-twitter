@@ -15,6 +15,7 @@ module.exports = (passport) => {
   passport.use(
     new JwtStrategy(options, (jwt_payload, done) => {
       console.log(jwt_payload);
+      //done will say that this middleware is done and can go to next one
       done();
     })
   );
