@@ -10,6 +10,7 @@ mongoose
 
 //listening for a get request on this endpoint and calls a callback that has the req and res
 app.get("/", (req, res) => {
+  debugger;
   res.send("Hello");
 });
 
