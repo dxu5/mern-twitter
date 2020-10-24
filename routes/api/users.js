@@ -4,6 +4,8 @@ const router = express.Router();
 //get user model
 const User = require("../../models/User.js");
 const bcrypt = require("bcryptjs");
+
+const keys = require("../../config/keys.js"); //has both mongo and secretorkey
 //basically making own custom routes that will be combined together in app?
 router.get("/test", (req, res) => {
   res.json({
@@ -45,6 +47,7 @@ router.post("/register", (req, res) => {
   });
 });
 
+//This will not persist through sessions! only for the current login!
 router.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -56,7 +59,7 @@ router.post("/login", (req, res) => {
 
     bcrypt.compare(password, user.password).then((isMatch) => {
       if (isMatch) {
-        res.json({ message: "Success" });
+        //give client back a json web token
       } else {
         res.status(400).json({ password: "Incorrect password." });
       }
