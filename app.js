@@ -1,6 +1,12 @@
 const express = require("express");
-
 const app = express();
+const mongoose = require("mongoose");
+const db = require("./config/keys.js").mongoURI;
+
+mongoose
+  .connect(db, { useNewUrlParser: true })
+  .then(() => console.log("connected to mongoDB"))
+  .catch((err) => console.log(err));
 
 //listening for a get request on this endpoint and calls a callback that has the req and res
 app.get("/", (req, res) => {
