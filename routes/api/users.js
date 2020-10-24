@@ -47,7 +47,7 @@ router.post("/register", (req, res) => {
 
 router.post("/login", (req, res) => {
   const email = req.body.email;
-  const password = req.body.email;
+  const password = req.body.password;
   User.findOne({ email }).then((user) => {
     if (!user) {
       //let frontend know something went wrong
