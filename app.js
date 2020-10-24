@@ -6,11 +6,24 @@ const users = require("./routes/api/users.js");
 const tweets = require("./routes/api/tweets.js");
 const User = require("./models/User.js");
 
+//basically tells app what sorts of requests to respond to
+const bodyParser = require("body-parser");
+
 //connects us to mongoDB but how will this work with it?
 mongoose
   .connect(db, { useNewUrlParser: true })
   .then(() => console.log("connected to mongoDB"))
   .catch((err) => console.log(err));
+
+//told app to respond to json requests
+//app can respond to other software like postman
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  })
+);
+
+app.use(bodyParser.json());
 
 //listening for a get request on this endpoint and calls a callback that has the req and res
 app.get("/", (req, res) => {
