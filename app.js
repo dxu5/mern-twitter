@@ -25,17 +25,6 @@ app.use(
 
 app.use(bodyParser.json());
 
-//listening for a get request on this endpoint and calls a callback that has the req and res
-app.get("/", (req, res) => {
-  const user = new User({
-    handle: "jim",
-    email: "jim@jim.jim",
-    password: "jimisgreat123",
-  });
-  //save to database
-  user.save();
-  res.send("Hello");
-});
 //if a route matches, will use that following module file to determine what to do
 app.use("/api/users", users);
 app.use("/api/tweets", tweets);

@@ -6,6 +6,9 @@ const User = require("../../models/User.js");
 const bcrypt = require("bcryptjs");
 
 const keys = require("../../config/keys.js"); //has both mongo and secretorkey
+
+const jwt = require("jsonwebtoken");
+
 //basically making own custom routes that will be combined together in app?
 router.get("/test", (req, res) => {
   res.json({
@@ -39,7 +42,24 @@ router.post("/register", (req, res) => {
           newUser.password = hash;
           newUser
             .save()
-            .then((user) => res.json(user))
+            .then((user) => {
+              const payload = {
+                id: user.id,
+                handle: user.handle,
+                email: user.email,
+              };
+              jwt.sign(
+                payload,
+                keys.secretOrKey,
+                { expiresIn: 3600 },
+                (err, token) => {
+                  res.json({
+                    success: true,
+                    token: "Bearer" + token,
+                  });
+                }
+              );
+            })
             .catch((err) => console.log(err));
         });
       });
@@ -60,6 +80,22 @@ router.post("/login", (req, res) => {
     bcrypt.compare(password, user.password).then((isMatch) => {
       if (isMatch) {
         //give client back a json web token
+        const payload = {
+          id: user.id,
+          handle: user.handle,
+          email: user.email,
+        };
+        jwt.sign(
+          payload,
+          keys.secretOrKey,
+          { expiresIn: 3600 },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: "Bearer" + token,
+            });
+          }
+        ); //token will expire in 1 hour, does it send back the entire payload as well?
       } else {
         res.status(400).json({ password: "Incorrect password." });
       }
