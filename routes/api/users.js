@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 //get user model
 const User = require("../../models/User.js");
+const bcrypt = require("bcryptjs");
 //basically making own custom routes that will be combined together in app?
 router.get("/test", (req, res) => {
   res.json({
@@ -24,10 +25,22 @@ router.post("/register", (req, res) => {
         password: req.body.password,
       });
 
-      newUser
-        .save()
-        .then((user) => res.send(user))
-        .catch((err) => res.send(err));
+      //err if something bad happens, salt to use to hash. Why would an error occur?
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          //check for errors
+          if (err) {
+            throw err;
+          }
+          //reset password for new user
+          //the res here is the one way up above so that you can send back responses for your frontend
+          newUser.password = hash;
+          newUser
+            .save()
+            .then((user) => res.json(user))
+            .catch((err) => console.log(err));
+        });
+      });
     }
   });
 });
