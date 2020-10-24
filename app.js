@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const db = require("./config/keys.js").mongoURI;
 const users = require("./routes/api/users.js");
 const tweets = require("./routes/api/tweets.js");
+const User = require("./models/User.js");
+
 //connects us to mongoDB but how will this work with it?
 mongoose
   .connect(db, { useNewUrlParser: true })
@@ -12,7 +14,13 @@ mongoose
 
 //listening for a get request on this endpoint and calls a callback that has the req and res
 app.get("/", (req, res) => {
-  debugger;
+  const user = new User({
+    handle: "jim",
+    email: "jim@jim.jim",
+    password: "jimisgreat123",
+  });
+  //save to database
+  user.save();
   res.send("Hello");
 });
 //if a route matches, will use that following module file to determine what to do
