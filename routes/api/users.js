@@ -11,6 +11,9 @@ const jwt = require("jsonwebtoken");
 
 const passport = require("passport");
 
+const validateRegisterInput = require("../../validation/register.js");
+const validateLoginInput = require("../../validation/login.js");
+
 //basically making own custom routes that will be combined together in app?
 router.get("/test", (req, res) => {
   res.json({
@@ -33,6 +36,13 @@ router.get(
 );
 
 router.post("/register", (req, res) => {
+  //req.body is the actual result of the form
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   User.findOne({ email: req.body.email }).then((user) => {
     //if user exists then we are going to return an error
     if (user) {
