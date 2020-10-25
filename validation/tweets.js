@@ -11,7 +11,7 @@ module.exports = function validateTweetInput(data) {
   }
 
   if (Validator.isEmpty(data.text)) {
-    errors.text = "Tweet field is required";
+    errors.text = "Text field is required";
   }
 
   return {
