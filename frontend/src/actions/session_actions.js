@@ -21,10 +21,28 @@ export const receiveUserSignIn = () => {
   };
 };
 
+//we dispatch this one to show authentication errors on the frontend
+export const receiveErrors = (errors) => {
+  return {
+    type: RECEIVE_SESSION_ERRORS,
+    errors,
+  };
+};
+
+//When our user logs out, we will dispatch this action to set isAuth to false
 export const logoutUser = () => {
   return {
     type: RECEIVE_USER_LOGOUT,
   };
+};
+
+//upon signup dispatch the appropriate action depending on which type of response is received from backend
+export const signup = (user) => (dispatch) => {
+  return APIUtil.signup(user)
+    .then(() => {
+      return dispatch(receiveCurrentUser(user));
+    })
+    .catch((err) => dispatch(receiveErrors(err.response.data)));
 };
 
 export const logout = () => (dispatch) => {
