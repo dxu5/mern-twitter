@@ -8,5 +8,6 @@ const mapStateToProps = (state) => {
     loggedIn: state.session.isAuthenticated,
   };
 };
+//change
 
 export default connect(mapStateToProps, { logout })(NavBar);
