@@ -19,6 +19,13 @@ router.get("/", (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
+router.get("/user/:user_id", (req, res) => {
+  //access to wildcard number
+  Tweet.find({ user: req.params.user_id })
+    .then((tweets) => res.json(tweets))
+    .catch((err) => res.status(400).json(err));
+});
+
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
