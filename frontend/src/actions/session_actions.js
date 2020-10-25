@@ -39,8 +39,24 @@ export const logoutUser = () => {
 //upon signup dispatch the appropriate action depending on which type of response is received from backend
 export const signup = (user) => (dispatch) => {
   return APIUtil.signup(user)
-    .then(() => {
-      return dispatch(receiveCurrentUser(user));
+    .then((res) => {
+      const { token } = res.data;
+      localStorage.setItem("jwtToken", token);
+      APIUtil.setAuthToken(token);
+      const decoded = jwt_decode(token);
+      return dispatch(receiveCurrentUser(decoded));
+    })
+    .catch((err) => dispatch(receiveErrors(err.response.data)));
+};
+
+export const login = (user) => (dispatch) => {
+  return APIUtil.login(user)
+    .then((res) => {
+      const { token } = res.data;
+      localStorage.setItem("jwtToken", token);
+      APIUtil.setAuthToken(token);
+      const decoded = jwt_decode(token);
+      return dispatch(receiveCurrentUser(decoded));
     })
     .catch((err) => dispatch(receiveErrors(err.response.data)));
 };
