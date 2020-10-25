@@ -26,6 +26,12 @@ router.get("/user/:user_id", (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
+router.get("/:id", (req, res) => {
+  Tweet.findOne({ _id: req.params.id })
+    .then((tweet) => res.json(tweet))
+    .catch((err) => res.status(400).json(err));
+});
+
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
