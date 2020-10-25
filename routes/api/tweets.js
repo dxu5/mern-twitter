@@ -4,12 +4,6 @@ const router = express.Router();
 const validateTweetInput = require("../..//validation/tweets");
 const Tweet = require("../../models/Tweet.js");
 const passport = require("passport");
-//basically making own custom routes that will be combined together in app?
-router.get("/test", (req, res) => {
-  res.json({
-    message: "This is the tweet route",
-  });
-});
 
 router.get("/", (req, res) => {
   //get everything back
