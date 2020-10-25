@@ -1,22 +1,26 @@
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const mongoose = require("mongoose");
-const passport = require("passport");
-//can either define a model or grab it!
 const User = mongoose.model("users");
-const keys = require("./keys.js");
+const keys = require("../config/keys");
 
 const options = {};
-//extract web token from header
 options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 options.secretOrKey = keys.secretOrKey;
 
 module.exports = (passport) => {
   passport.use(
     new JwtStrategy(options, (jwt_payload, done) => {
-      console.log(jwt_payload);
-      //done will say that this middleware is done and can go to next one
-      done();
+      User.findById(jwt_payload.id)
+        .then((user) => {
+          if (user) {
+            // return the user to the frontend
+            return done(null, user);
+          }
+          // return false since there is no user
+          return done(null, false);
+        })
+        .catch((err) => console.log(err));
     })
   );
 };

@@ -1,19 +1,26 @@
 const express = require("express");
 const app = express();
-const mongoose = require("mongoose");
+
 const db = require("./config/keys.js").mongoURI;
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const passport = require("passport");
+
 const users = require("./routes/api/users.js");
 const tweets = require("./routes/api/tweets.js");
-const User = require("./models/User.js");
 
 //basically tells app what sorts of requests to respond to
-const bodyParser = require("body-parser");
 
 //connects us to mongoDB but how will this work with it?
 mongoose
   .connect(db, { useNewUrlParser: true })
   .then(() => console.log("connected to mongoDB"))
   .catch((err) => console.log(err));
+
+app.use(passport.initialize());
+require("./config/passport")(passport);
+
+app.get("/", (req, res) => res.send("Hello World!!"));
 
 //told app to respond to json requests
 //app can respond to other software like postman

@@ -9,12 +9,28 @@ const keys = require("../../config/keys.js"); //has both mongo and secretorkey
 
 const jwt = require("jsonwebtoken");
 
+const passport = require("passport");
+
 //basically making own custom routes that will be combined together in app?
 router.get("/test", (req, res) => {
   res.json({
     message: "This is the user route",
   });
 });
+
+// users.js
+// You may want to start commenting in information about your routes so that you can find the appropriate ones quickly.
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      id: req.user.id,
+      handle: req.user.handle,
+      email: req.user.email,
+    });
+  }
+);
 
 router.post("/register", (req, res) => {
   User.findOne({ email: req.body.email }).then((user) => {
@@ -55,7 +71,7 @@ router.post("/register", (req, res) => {
                 (err, token) => {
                   res.json({
                     success: true,
-                    token: "Bearer" + token,
+                    token: "Bearer " + token,
                   });
                 }
               );
@@ -92,7 +108,7 @@ router.post("/login", (req, res) => {
           (err, token) => {
             res.json({
               success: true,
-              token: "Bearer" + token,
+              token: "Bearer " + token,
             });
           }
         ); //token will expire in 1 hour, does it send back the entire payload as well?
