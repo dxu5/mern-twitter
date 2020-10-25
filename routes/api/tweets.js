@@ -11,6 +11,14 @@ router.get("/test", (req, res) => {
   });
 });
 
+router.get("/", (req, res) => {
+  //get everything back
+  Tweet.find()
+    .sort({ date: -1 })
+    .then((tweets) => res.json(tweets))
+    .catch((err) => res.status(400).json(err));
+});
+
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
