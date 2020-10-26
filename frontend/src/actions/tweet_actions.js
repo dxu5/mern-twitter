@@ -1,4 +1,3 @@
-import { distinct } from "../../../models/Tweet";
 import * as TweetAPIUtil from "../util/tweet_api_util";
 
 export const RECEIVE_TWEETS = "RECEIVE_TWEETS";
@@ -32,7 +31,7 @@ export const fetchTweets = () => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
-export const fetchTweet = (id) => (dispatch) => {
+export const fetchUserTweets = (id) => (dispatch) => {
   return TweetAPIUtil.getUserTweets(id)
     .then((tweets) => {
       dispatch(receiveUserTweets(tweets));
