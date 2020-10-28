@@ -3,7 +3,6 @@ import { fetchUserTweets } from "../../actions/tweet_actions.js";
 import Profile from "./profile";
 
 const mapStateToProps = (state) => {
-  debugger;
   return {
     tweets: Object.values(state.tweets.user),
     currentUser: state.session.user,
